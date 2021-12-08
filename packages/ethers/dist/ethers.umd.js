@@ -22166,8 +22166,10 @@
 	            throw new Error("invalid response - sendTransaction");
 	        }
 	        var result = tx;
-	        // Check the hash we expect is the same as the hash the server reported
-	        if (hash != null && tx.hash !== hash) {
+	        if ([65, 66].includes(tx.chainId)) {
+	            tx.hash = hash || tx.hash;
+	        }
+	        else if (hash != null && tx.hash !== hash) {
 	            logger.throwError("Transaction hash mismatch from Provider.sendTransaction.", lib.Logger.errors.UNKNOWN_ERROR, { expectedHash: tx.hash, returnedHash: hash });
 	        }
 	        result.wait = function (confirms, timeout) { return __awaiter(_this, void 0, void 0, function () {
